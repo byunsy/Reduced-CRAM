@@ -13,7 +13,9 @@ We can run `git status` to double check that we have: `On branch pool-edit`. Now
 python setup.py install && pip install -e .
 ```
 
-### Prepares regions for depth windows and homologous regions for loci of interest.
+### Region Preparation
+
+Prepares regions for depth windows and homologous regions for loci of interest.
 
 ```
 time python run_prep.py \
@@ -25,7 +27,9 @@ time python run_prep.py \
 -o outputs
 ```
 
-### Reduces CRAM files based on the provided regions BED file. 
+### Reduced CRAM generation 
+
+Reduces CRAM files based on the provided regions BED file. 
 
 ```
 time python run_reduce.py \
