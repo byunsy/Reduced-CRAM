@@ -1,3 +1,5 @@
+# Reduced-CRAM
+
 ### Setup
 We first need to clone a specific branch of Parascopy. This branch includes some small modifications on Parascopy's pooling function.
 
