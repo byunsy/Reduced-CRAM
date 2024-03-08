@@ -68,6 +68,25 @@ def get_hom_regions(loci_list, ref, table, out_file, outdir):
     subprocess.call([f'rm {tmp_file}'], shell=True)
 
 
+def add_loci_to_hom_regions(loci_file, hom_file, outdir):
+    """
+    Concatenate loci regions to homologous regions
+    """
+    with open(loci_file, "r") as loci_i, open(hom_file, "a") as loci_o:
+        loci = ["\t".join(line.split("\t")[:3]) for line in loci_i.read().splitlines()]
+        loci_o.write("\n".join(loci)+"\n")
+
+    with open(hom_file, "r") as inpf:
+        hom_reg = inpf.read().splitlines()
+    hom_reg_sorted = _utils.natural_sort(hom_reg)
+
+    with open(hom_file, "w") as outf:
+        outf.writelines("\n".join(hom_reg_sorted) + "\n")
+
+    #subprocess.call([f'bedtools merge -i {tmp_file} > {hom_file}'], shell=True)
+    #subprocess.call([f'rm {tmp_file}'], shell=True)
+
+
 def combine_all_regions(depth_outf, hom_outf):
 
     with open(depth_outf, "r") as d_inpf, open(hom_outf, "r") as h_inpf:
@@ -112,7 +131,7 @@ def get_regions():
     print(f"\tUsing the following reference file: {FASTA_REF}\n")
 
     DEPTHS_FILE = f"{OUTDIR}/depth.regions.{HG_VER}.bed"
-    HOM_REGIONS = f"{OUTDIR}/hom.regions.{HG_VER}.bed"
+    HOM_REGIONS = f"{OUTDIR}/loci.and.hom.regions.{HG_VER}.bed"
     
     subprocess.call([f'bedtools merge -i {DEPTH_REG} > {DEPTHS_FILE}'], shell=True)
     
@@ -128,7 +147,10 @@ def get_regions():
     get_hom_regions(loci_list, FASTA_REF, HOM_TABLE, HOM_REGIONS, OUTDIR)
     hom_regions = parse_file(HOM_REGIONS)
 
-    # (4) Combine both regions (optional)
+    # (4) Concatenate loci regions to HOM_REGIONS file.
+    add_loci_to_hom_regions(LOCI_LIST, HOM_REGIONS, OUTDIR)
+
+    # (5) Combine both regions (optional)
     combine_all_regions(DEPTHS_FILE, HOM_REGIONS)
 
     print(f"\tFound the folloing regions")
