@@ -13,6 +13,8 @@ We can run `git status` to double check that we have: `On branch pool-edit`. Now
 python setup.py install && pip install -e .
 ```
 
+Requirements are same as the original Parascopy.
+
 ### Region Preparation
 
 Prepares regions for depth windows and homologous regions for loci of interest.
